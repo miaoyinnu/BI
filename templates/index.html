@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gradient-to-r from-purple-500 to-pink-500 min-h-screen">
-    <!-- 顶部导航栏 - 与登录/注册页面保持一致 -->
+    <!-- 顶部导航栏 -->
     <nav class="bg-white/80 backdrop-blur-sm">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center h-16">
@@ -16,33 +16,31 @@
                     <img src="{{ url_for('static', filename='images/default-avatar.png') }}" 
                          alt="avatar" 
                          class="w-8 h-8 rounded-full">
-{#                    <a href="/" class="text-gray-600 hover:text-purple-600">Home</a>#}
                     <a href="/login" class="text-gray-600 hover:text-purple-600">Login</a>
                     <a href="/register" class="text-gray-600 hover:text-purple-600">Register</a>
-
                 </div>
             </div>
         </div>
     </nav>
 
     <!-- 主要内容区域 -->
-    <div class="main-container container mx-auto px-4 py-12">
+    <div class="container mx-auto px-4 py-12">
         <!-- 欢迎文本 -->
-        <div class="welcome-text text-center mb-12">
+        <div class="text-center mb-12">
             <h1 class="text-4xl font-bold text-white mb-4">Welcome to BI System</h1>
             <p class="text-xl text-white/90">Your Smart Fashion Analysis Platform</p>
         </div>
 
-        <!-- 反馈部分 -->
-        <div class="feedback-section max-w-2xl mx-auto bg-white/80 backdrop-blur-sm rounded-lg p-6 shadow-lg">
-            <h3 class="text-2xl font-bold text-purple-600 mb-4">Market Feedback</h3>
-            <textarea 
-                class="w-full h-32 p-4 mb-4 rounded-lg border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200"
-                placeholder="Please enter your feedback here..."></textarea>
-            <button type="button" 
-                    class="submit-feedback-btn bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300">
-                Submit Feedback
-            </button>
+        <!-- 按钮区域 -->
+        <div class="flex justify-center gap-6 mt-12">
+            <a href="/login" 
+               class="bg-white/80 backdrop-blur-sm hover:bg-white/90 text-purple-600 font-bold py-3 px-8 rounded-lg text-lg transition duration-300 shadow-lg">
+                Sales
+            </a>
+            <a href="/feedback" 
+               class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition duration-300 shadow-lg">
+                Market Feedback
+            </a>
         </div>
     </div>
 </body>
