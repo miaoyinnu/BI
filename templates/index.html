@@ -1,31 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Fashion BI System</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="header">
-        <div class="header-right">
-            <div class="avatar-container">
-                <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="Default Avatar" class="avatar">
+<body class="bg-gradient-to-r from-purple-500 to-pink-500 min-h-screen">
+    <!-- 顶部导航栏 - 与登录/注册页面保持一致 -->
+    <nav class="bg-white/80 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <h1 class="text-xl font-bold text-purple-600">Home</h1>
+                <div class="flex items-center gap-4">
+                    <img src="{{ url_for('static', filename='images/default-avatar.png') }}" 
+                         alt="avatar" 
+                         class="w-8 h-8 rounded-full">
+{#                    <a href="/" class="text-gray-600 hover:text-purple-600">Home</a>#}
+                    <a href="/login" class="text-gray-600 hover:text-purple-600">Login</a>
+                    <a href="/register" class="text-gray-600 hover:text-purple-600">Register</a>
+
+                </div>
             </div>
-            <a href="/login">Login</a>
-            <a href="/register">Register</a>
         </div>
-    </div>
+    </nav>
 
-    <div class="main-container">
-        <div class="welcome-text">
-            <h1>Welcome to BI System</h1>
-            <p>Your Smart Fashion Analysis Platform</p>
+    <!-- 主要内容区域 -->
+    <div class="main-container container mx-auto px-4 py-12">
+        <!-- 欢迎文本 -->
+        <div class="welcome-text text-center mb-12">
+            <h1 class="text-4xl font-bold text-white mb-4">Welcome to BI System</h1>
+            <p class="text-xl text-white/90">Your Smart Fashion Analysis Platform</p>
         </div>
 
-        <div class="feedback-section">
-            <h3>Market Feedback</h3>
-            <textarea placeholder="Please enter your feedback here..."></textarea>
-            <button type="button" class="submit-feedback-btn">Submit Feedback</button>
+        <!-- 反馈部分 -->
+        <div class="feedback-section max-w-2xl mx-auto bg-white/80 backdrop-blur-sm rounded-lg p-6 shadow-lg">
+            <h3 class="text-2xl font-bold text-purple-600 mb-4">Market Feedback</h3>
+            <textarea 
+                class="w-full h-32 p-4 mb-4 rounded-lg border border-gray-300 focus:border-purple-500 focus:ring-2 focus:ring-purple-200"
+                placeholder="Please enter your feedback here..."></textarea>
+            <button type="button" 
+                    class="submit-feedback-btn bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-6 rounded-lg transition duration-300">
+                Submit Feedback
+            </button>
         </div>
     </div>
 </body>
