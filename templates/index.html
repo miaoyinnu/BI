@@ -23,24 +23,24 @@
         </div>
     </nav>
 
-    <!-- 主要内容区域 -->
-    <div class="container mx-auto px-4 py-12">
-        <!-- 欢迎文本 -->
-        <div class="text-center mb-12">
+    <!-- 主要内容区域 - 垂直和水平居中 -->
+    <div class="flex items-center justify-center min-h-[calc(100vh-4rem)]">
+        <div class="text-center px-8 py-12 bg-white/10 backdrop-blur-sm rounded-lg">
+            <!-- 欢迎文本 -->
             <h1 class="text-4xl font-bold text-white mb-4">Welcome to BI System</h1>
-            <p class="text-xl text-white/90">Your Smart Fashion Analysis Platform</p>
-        </div>
+            <p class="text-xl text-white/90 mb-12">Your Smart Fashion Analysis Platform</p>
 
-        <!-- 按钮区域 -->
-        <div class="flex justify-center gap-6 mt-12">
-            <a href="/login" 
-               class="bg-white/80 backdrop-blur-sm hover:bg-white/90 text-purple-600 font-bold py-3 px-8 rounded-lg text-lg transition duration-300 shadow-lg">
-                Sales
-            </a>
-            <a href="/feedback" 
-               class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition duration-300 shadow-lg">
-                Market Feedback
-            </a>
+            <!-- 按钮区域 -->
+            <div class="flex justify-center gap-6">
+                <a href="/login" 
+                   class="bg-white/80 backdrop-blur-sm hover:bg-white/90 text-purple-600 font-bold py-3 px-8 rounded-lg text-lg transition duration-300 shadow-lg">
+                    Sales
+                </a>
+                <a href="/feedback" 
+                   class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-3 px-8 rounded-lg text-lg transition duration-300 shadow-lg">
+                    Market Feedback
+                </a>
+            </div>
         </div>
     </div>
 </body>
