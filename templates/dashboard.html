@@ -8,7 +8,7 @@
 </head>
 <body class="bg-gradient-to-r from-purple-500 to-pink-500 min-h-screen">
     <!-- Navigation Bar -->
-    <nav class="bg-white/80 backdrop-blur-sm shadow-lg fixed w-full top-0 z-50">
+    <nav class="bg-white/80 backdrop-blur-sm">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center h-16">
                 <div class="text-xl font-bold text-purple-600">
@@ -16,12 +16,12 @@
                 </div>
                 
                 <!-- User Profile Section -->
-                <div class="flex items-center space-x-4">
+                <div class="flex items-center justify-end gap-4">
                     <div class="flex items-center">
-                        <img class="h-8 w-8 rounded-full" src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="User avatar">
-                        <span class="ml-2 text-gray-700">Welcome, {{ username }}</span>
+                        <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="avatar" class="w-8 h-8 rounded-full">
+                        <span class="ml-2">Welcome, {{ username if username else 'Guest' }}</span>
                     </div>
-                    <a href="/logout" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition duration-300">
+                    <a href="/logout" class="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg">
                         Logout
                     </a>
                 </div>

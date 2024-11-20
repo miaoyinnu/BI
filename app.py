@@ -34,22 +34,13 @@ def index():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-
-        # 验证用户
-        conn = mysql.connector.connect(**db_config)
-        cursor = conn.cursor()
-        cursor.execute('SELECT * FROM users WHERE username = %s AND password = %s',
-                       (username, password))
-        user = cursor.fetchone()
-        cursor.close()
-        conn.close()
-
-        if user:
-            session['username'] = username
+        username = request.form.get('username')
+        password = request.form.get('password')
+        
+        # 验证成功后
+        if verify_user(username, password):
+            session['username'] = username  # 存储用户名到 session
             return redirect(url_for('dashboard'))
-
     return render_template('login.html')
 
 
@@ -101,82 +92,9 @@ def register():
 def dashboard():
     if 'username' not in session:
         return redirect(url_for('login'))
-
-    conn = mysql.connector.connect(**db_config)
-    cursor = conn.cursor()
     
-    try:
-        # 获取总体指标
-        cursor.execute('''
-            SELECT 
-                COALESCE(SUM(s.quantity * s.unit_price), 0) as total_revenue,
-                COALESCE((SUM(s.quantity * s.unit_price) - SUM(s.quantity * c.base_price)) / 
-                    NULLIF(SUM(s.quantity * s.unit_price), 0) * 100, 0) as profit_rate,
-                COALESCE(SUM(s.quantity * s.unit_price) - SUM(s.quantity * c.base_price), 0) as gross_margin,
-                COALESCE(SUM(s.quantity), 0) as total_quantity
-            FROM clothing_categories c
-            LEFT JOIN sales_data s ON c.id = s.category_id
-        ''')
-        metrics = cursor.fetchone()
-        
-        if not metrics:
-            metrics = (0, 0, 0, 0)
-        
-        # 获取销售数据
-        cursor.execute('''
-            SELECT s.*, c.category_name 
-            FROM sales_data s
-            JOIN clothing_categories c ON s.category_id = c.id
-            ORDER BY s.date DESC LIMIT 10
-        ''')
-        data = cursor.fetchall()
-        
-        # 获取国家分布数据
-        cursor.execute('''
-            SELECT country, SUM(quantity * unit_price) as revenue
-            FROM sales_data
-            GROUP BY country
-            ORDER BY revenue DESC
-        ''')
-        country_data = cursor.fetchall() or [('No Data', 0)]
-        
-        # 获取年度分布数据
-        cursor.execute('''
-            SELECT YEAR(date) as year, SUM(quantity * unit_price) as revenue
-            FROM sales_data
-            GROUP BY YEAR(date)
-            ORDER BY year
-        ''')
-        year_data = cursor.fetchall() or [('No Data', 0)]
-        
-        # 获取产品分布数据
-        cursor.execute('''
-            SELECT c.category_name, SUM(s.quantity * s.unit_price) as revenue
-            FROM clothing_categories c
-            LEFT JOIN sales_data s ON c.id = s.category_id
-            GROUP BY c.category_name
-            ORDER BY revenue DESC
-        ''')
-        product_data = cursor.fetchall() or [('No Data', 0)]
-        
-    except Exception as e:
-        print(f"Database error: {e}")
-        metrics = (0, 0, 0, 0)
-        data = []
-        country_data = [('Error', 0)]
-        year_data = [('Error', 0)]
-        product_data = [('Error', 0)]
-    
-    finally:
-        cursor.close()
-        conn.close()
-    
-    return render_template('dashboard.html', 
-                         metrics=metrics,
-                         data=data,
-                         country_data=country_data,
-                         year_data=year_data,
-                         product_data=product_data)
+    username = session.get('username', '')  # 获取用户名
+    return render_template('dashboard.html', username=username)
 
 
 @app.route('/upload', methods=['POST'])
