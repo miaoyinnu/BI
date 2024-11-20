@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 import mysql.connector
-from database import init_db
+from database import get_db_connection
 import re
 import pandas as pd
 import os
@@ -285,5 +285,4 @@ def logout():
 
 
 if __name__ == '__main__':
-    init_db()  # 初始化数据库
     app.run(debug=True)
