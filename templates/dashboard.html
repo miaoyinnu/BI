@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard - Fashion BI System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <nav class="top-nav">
+            <div class="logo">Sales data analysis of small and medium-sized garment enterprises</div>
+            <div class="filters">
+                <div class="filter-group">
+                    <label>Country</label>
+                    <select id="countryFilter">
+                        <option value="">All</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>ProductName</label>
+                    <select id="productFilter">
+                        <option value="">All</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Year</label>
+                    <select id="yearFilter">
+                        <option value="">All</option>
+                    </select>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="metrics-container">
+            <div class="metric-card">
+                <div class="metric-title">selling revenue</div>
+                <div class="metric-value">{{ "{:,.2f}".format(metrics[0]) }}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">gross profit rate</div>
+                <div class="metric-value">{{ "{:.2f}%".format(metrics[1]) }}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">gross margin</div>
+                <div class="metric-value">{{ "{:,.2f}".format(metrics[2]) }}</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-title">selling number</div>
+                <div class="metric-value">{{ "{:,}".format(metrics[3]) }}</div>
+            </div>
+        </div>
+
+        <div class="charts-container">
+            <div class="chart-row">
+                <div class="chart-card">
+                    <h3>Country income distribution</h3>
+                    <canvas id="countryPieChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Sales revenue VS PY Sales revenue</h3>
+                    <canvas id="revenueBarChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-row">
+                <div class="chart-card">
+                    <h3>Year income distribution</h3>
+                    <canvas id="yearPieChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>Product income distribution</h3>
+                    <canvas id="productPieChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html> 
