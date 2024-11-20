@@ -3,6 +3,36 @@ from database import get_db_connection  # 导入数据库连接函数
 
 app = Flask(__name__)
 
+
+@app.route('/feedback')
+def feedback():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        # 获取反馈评价的分布数据
+        cursor.execute("""
+            SELECT rating, 
+                   ROUND((COUNT(*) * 100.0 / (SELECT COUNT(*) FROM feedback)), 2) as percentage
+            FROM feedback 
+            GROUP BY rating 
+            ORDER BY FIELD(rating, 'good', 'medium', 'bad')
+        """)
+
+        results = cursor.fetchall()
+        # 初始化百分比为0
+        percentages = {'good': 0, 'medium': 0, 'bad': 0}
+        for row in results:
+            percentages[row[0]] = row[1]
+
+        return render_template('feedback.html', percentages=percentages)
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return render_template('feedback.html', percentages={'good': 0, 'medium': 0, 'bad': 0})
+    finally:
+        cursor.close()
+        conn.close()
 @app.route('/')
 def index():
     return render_template('index.html')
