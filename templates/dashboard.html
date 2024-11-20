@@ -5,17 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="bg-gradient-to-r from-purple-500 to-pink-500 min-h-screen">
-    <!-- Navigation Bar -->
-    <nav class="bg-white/80 backdrop-blur-sm">
+    <nav class="bg-white/80 backdrop-blur-sm fixed w-full z-10 top-0">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center h-16">
                 <div class="text-xl font-bold text-purple-600">
                     Dashboard
                 </div>
-                
-                <!-- User Profile Section -->
+
                 <div class="flex items-center justify-end gap-4">
                     <div class="flex items-center">
                         <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="avatar" class="w-8 h-8 rounded-full">
@@ -29,50 +28,176 @@
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <div class="container mx-auto px-4 pt-20">
-        <!-- Stats Cards -->
+    <div class="container mx-auto px-4 pt-24">
         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
             <div class="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-6">
-                <h3 class="text-gray-500 text-sm">selling revenue</h3>
-                <p class="text-2xl font-bold">0.00</p>
+                <h3 class="text-gray-500 text-sm">Selling Revenue</h3>
+                <p class="text-2xl font-bold">{{ stats.total_revenue or 0.00 }}</p>
             </div>
             <div class="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-6">
-                <h3 class="text-gray-500 text-sm">gross profit rate</h3>
-                <p class="text-2xl font-bold">0.00%</p>
+                <h3 class="text-gray-500 text-sm">Gross Profit Rate</h3>
+                <p class="text-2xl font-bold">{{ stats.avg_profit_rate or 0.00 }}%</p>
             </div>
             <div class="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-6">
-                <h3 class="text-gray-500 text-sm">gross margin</h3>
-                <p class="text-2xl font-bold">0.00</p>
+                <h3 class="text-gray-500 text-sm">Gross Margin</h3>
+                <p class="text-2xl font-bold">{{ stats.total_margin or 0.00 }}</p>
             </div>
             <div class="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-6">
-                <h3 class="text-gray-500 text-sm">selling number</h3>
-                <p class="text-2xl font-bold">0</p>
+                <h3 class="text-gray-500 text-sm">Selling Number</h3>
+                <p class="text-2xl font-bold">{{ stats.total_sold or 0 }}</p>
             </div>
         </div>
 
-        <!-- Charts Section -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
             <div class="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-6">
-                <h2 class="text-xl font-bold mb-4">Country income distribution</h2>
-                <!-- Chart content -->
+                <h2 class="text-xl font-bold mb-4">Country Income Distribution</h2>
+                <canvas id="countryIncomeChart"></canvas>
             </div>
             <div class="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-6">
-                <h2 class="text-xl font-bold mb-4">Sales revenue VS PY Sales revenue</h2>
-                <!-- Chart content -->
+                <h2 class="text-xl font-bold mb-4">Sales Revenue VS PY Sales Revenue</h2>
+                <canvas id="salesVsPyChart"></canvas>
             </div>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div class="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-6">
-                <h2 class="text-xl font-bold mb-4">Year income distribution</h2>
-                <!-- Chart content -->
+                <h2 class="text-xl font-bold mb-4">Year Income Distribution</h2>
+                <canvas id="yearIncomeChart"></canvas>
             </div>
             <div class="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-6">
-                <h2 class="text-xl font-bold mb-4">Product income distribution</h2>
-                <!-- Chart content -->
+                <h2 class="text-xl font-bold mb-4">Product Income Distribution</h2>
+                <canvas id="productIncomeChart"></canvas>
             </div>
         </div>
     </div>
+
+    <script>
+        const countryIncomeData = {
+            labels: {{ country_income | map(attribute='Country') | list | tojson }},
+            datasets: [{
+                label: 'Revenue',
+                data: {{ country_income | map(attribute='revenue') | list | tojson }},
+                backgroundColor: 'rgba(75, 192, 192, 0.6)'
+            }]
+        };
+
+        const countryIncomeConfig = {
+            type: 'bar',
+            data: countryIncomeData,
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        new Chart(
+            document.getElementById('countryIncomeChart'),
+            countryIncomeConfig
+        );
+
+        const salesVsPyData = {
+            labels: {{ sales_vs_py | map(attribute='Month') | list | tojson }},
+            datasets: [
+                {
+                    label: 'Current Revenue',
+                    data: {{ sales_vs_py | map(attribute='current_revenue') | list | tojson }},
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    fill: true,
+                    tension: 0.1
+                },
+                {
+                    label: 'Previous Revenue',
+                    data: {{ sales_vs_py | map(attribute='previous_revenue') | list | tojson }},
+                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    fill: true,
+                    tension: 0.1
+                }
+            ]
+        };
+
+        const salesVsPyConfig = {
+            type: 'line',
+            data: salesVsPyData,
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        new Chart(
+            document.getElementById('salesVsPyChart'),
+            salesVsPyConfig
+        );
+
+        const yearIncomeData = {
+            labels: {{ year_income | map(attribute='Month') | list | tojson }},
+            datasets: [{
+                label: 'Revenue',
+                data: {{ year_income | map(attribute='revenue') | list | tojson }},
+                backgroundColor: 'rgba(153, 102, 255, 0.6)'
+            }]
+        };
+
+        const yearIncomeConfig = {
+            type: 'bar',
+            data: yearIncomeData,
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        new Chart(
+            document.getElementById('yearIncomeChart'),
+            yearIncomeConfig
+        );
+
+        const productIncomeData = {
+            labels: {{ product_income | map(attribute='ProductName') | list | tojson }},
+            datasets: [{
+                label: 'Revenue',
+                data: {{ product_income | map(attribute='revenue') | list | tojson }},
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(255, 206, 86, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(153, 102, 255, 0.6)',
+                    'rgba(255, 159, 64, 0.6)',
+                    'rgba(199, 199, 199, 0.6)',
+                    'rgba(83, 102, 255, 0.6)',
+                    'rgba(255, 102, 255, 0.6)',
+                    'rgba(102, 255, 102, 0.6)'
+                ]
+            }]
+        };
+
+        const productIncomeConfig = {
+            type: 'pie',
+            data: productIncomeData,
+            options: {
+                responsive: true
+            }
+        };
+
+        new Chart(
+            document.getElementById('productIncomeChart'),
+            productIncomeConfig
+        );
+    </script>
 </body>
-</html> 
+</html>

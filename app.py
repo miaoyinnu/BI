@@ -72,8 +72,86 @@ def register():
 
 @app.route('/dashboard')
 def dashboard():
-    username = request.args.get('username', 'Guest')  # 获取传递的用户名，默认为Guest
-    return render_template('dashboard.html', username=username)
+    username = request.args.get('username', 'Guest')  # 获取传递的用户名，默认为 Guest
 
+    conn = get_db_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    try:
+        # 查询统计数据
+        stats_query = """
+        SELECT
+            SUM(SellingRevenue) AS total_revenue,
+            AVG(GrossProfitRate) AS avg_profit_rate,
+            SUM(GrossMargin) AS total_margin,
+            SUM(SellingNumber) AS total_sold
+        FROM Sales
+        """
+        cursor.execute(stats_query)
+        stats = cursor.fetchone()
+
+        # 查询国家收入分布数据
+        country_income_query = """
+        SELECT
+            r.Country,
+            SUM(s.SellingRevenue) AS revenue
+        FROM Sales s
+        JOIN Region r ON s.RegionID = r.RegionID
+        GROUP BY r.Country
+        """
+        cursor.execute(country_income_query)
+        country_income = cursor.fetchall()
+
+        # 查询销售收入与去年销售收入对比数据
+        sales_vs_py_query = """
+        SELECT
+            d.Month,
+            SUM(s.SellingRevenue) AS current_revenue,
+            SUM(h.PY_SellingRevenue) AS previous_revenue
+        FROM Sales s
+        JOIN DateDim d ON s.DateID = d.DateID
+        JOIN HistoricalSales h ON s.ProductID = h.ProductID AND s.RegionID = h.RegionID AND s.DateID = h.DateID
+        GROUP BY d.Month, d.DateID
+        ORDER BY d.DateID
+        """
+        cursor.execute(sales_vs_py_query)
+        sales_vs_py = cursor.fetchall()
+
+        # 查询年度收入分布数据
+        year_income_query = """
+        SELECT
+            d.Month,
+            SUM(s.SellingRevenue) AS revenue
+        FROM Sales s
+        JOIN DateDim d ON s.DateID = d.DateID
+        GROUP BY d.Month, d.DateID
+        ORDER BY d.DateID
+        """
+        cursor.execute(year_income_query)
+        year_income = cursor.fetchall()
+
+        # 查询产品收入分布数据
+        product_income_query = """
+        SELECT
+            p.ProductName,
+            SUM(s.SellingRevenue) AS revenue
+        FROM Sales s
+        JOIN Product p ON s.ProductID = p.ProductID
+        GROUP BY p.ProductName
+        """
+        cursor.execute(product_income_query)
+        product_income = cursor.fetchall()
+
+        # 将数据传递给模板
+        return render_template('dashboard.html', username=username, stats=stats,
+                               country_income=country_income, sales_vs_py=sales_vs_py,
+                               year_income=year_income, product_income=product_income)
+
+    except Exception as e:
+        print(f"Error: {e}")
+        return render_template('dashboard.html', username=username)
+    finally:
+        cursor.close()
+        conn.close()
 if __name__ == '__main__':
     app.run(debug=True, port=5000)
