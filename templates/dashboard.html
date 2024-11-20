@@ -1,78 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Dashboard - Fashion BI System</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="dashboard-container">
-        <nav class="top-nav">
-            <div class="logo">Sales data analysis of small and medium-sized garment enterprises</div>
-            <div class="filters">
-                <div class="filter-group">
-                    <label>Country</label>
-                    <select id="countryFilter">
-                        <option value="">All</option>
-                    </select>
+<body class="bg-gradient-to-r from-purple-500 to-pink-500 min-h-screen">
+    <!-- Navigation Bar -->
+    <nav class="bg-white/80 backdrop-blur-sm shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-between items-center h-16">
+                <div class="text-xl font-bold text-purple-600">
+                    Dashboard
                 </div>
-                <div class="filter-group">
-                    <label>ProductName</label>
-                    <select id="productFilter">
-                        <option value="">All</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Year</label>
-                    <select id="yearFilter">
-                        <option value="">All</option>
-                    </select>
+                
+                <!-- User Profile Section -->
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center">
+                        <img class="h-8 w-8 rounded-full" src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="User avatar">
+                        <span class="ml-2 text-gray-700">Welcome, {{ username }}</span>
+                    </div>
+                    <a href="/logout" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg transition duration-300">
+                        Logout
+                    </a>
                 </div>
             </div>
-        </nav>
-        
-        <div class="metrics-container">
-            <div class="metric-card">
-                <div class="metric-title">selling revenue</div>
-                <div class="metric-value">{{ "{:,.2f}".format(metrics[0]) }}</div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-4 pt-20">
+        <!-- Stats Cards -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-6">
+                <h3 class="text-gray-500 text-sm">selling revenue</h3>
+                <p class="text-2xl font-bold">0.00</p>
             </div>
-            <div class="metric-card">
-                <div class="metric-title">gross profit rate</div>
-                <div class="metric-value">{{ "{:.2f}%".format(metrics[1]) }}</div>
+            <div class="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-6">
+                <h3 class="text-gray-500 text-sm">gross profit rate</h3>
+                <p class="text-2xl font-bold">0.00%</p>
             </div>
-            <div class="metric-card">
-                <div class="metric-title">gross margin</div>
-                <div class="metric-value">{{ "{:,.2f}".format(metrics[2]) }}</div>
+            <div class="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-6">
+                <h3 class="text-gray-500 text-sm">gross margin</h3>
+                <p class="text-2xl font-bold">0.00</p>
             </div>
-            <div class="metric-card">
-                <div class="metric-title">selling number</div>
-                <div class="metric-value">{{ "{:,}".format(metrics[3]) }}</div>
+            <div class="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-6">
+                <h3 class="text-gray-500 text-sm">selling number</h3>
+                <p class="text-2xl font-bold">0</p>
             </div>
         </div>
 
-        <div class="charts-container">
-            <div class="chart-row">
-                <div class="chart-card">
-                    <h3>Country income distribution</h3>
-                    <canvas id="countryPieChart"></canvas>
-                </div>
-                <div class="chart-card">
-                    <h3>Sales revenue VS PY Sales revenue</h3>
-                    <canvas id="revenueBarChart"></canvas>
-                </div>
+        <!-- Charts Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+            <div class="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-bold mb-4">Country income distribution</h2>
+                <!-- Chart content -->
             </div>
-            <div class="chart-row">
-                <div class="chart-card">
-                    <h3>Year income distribution</h3>
-                    <canvas id="yearPieChart"></canvas>
-                </div>
-                <div class="chart-card">
-                    <h3>Product income distribution</h3>
-                    <canvas id="productPieChart"></canvas>
-                </div>
+            <div class="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-bold mb-4">Sales revenue VS PY Sales revenue</h2>
+                <!-- Chart content -->
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-bold mb-4">Year income distribution</h2>
+                <!-- Chart content -->
+            </div>
+            <div class="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-6">
+                <h2 class="text-xl font-bold mb-4">Product income distribution</h2>
+                <!-- Chart content -->
             </div>
         </div>
     </div>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
 </html> 
