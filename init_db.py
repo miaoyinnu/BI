@@ -3,7 +3,6 @@ from mysql.connector import Error
 
 def create_database():
     try:
-        # 先尝试不指定数据库连接
         conn = mysql.connector.connect(
             host='127.0.0.1',
             user='root',
@@ -13,7 +12,6 @@ def create_database():
         if conn.is_connected():
             cursor = conn.cursor()
 
-            # 检查数据库是否已存在
             cursor.execute("SHOW DATABASES LIKE 'fashion_bi'")
             result = cursor.fetchone()
             
@@ -21,12 +19,10 @@ def create_database():
                 print("Database 'fashion_bi' already exists.")
                 return
             
-            # 创建数据库和表
             print("Creating database...")
             cursor.execute("CREATE DATABASE fashion_bi")
             cursor.execute("USE fashion_bi")
 
-            # 创建用户表
             cursor.execute('''
                 CREATE TABLE users (
                     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -35,7 +31,6 @@ def create_database():
                 )
             ''')
 
-            # 创建服装类别表
             cursor.execute('''
                 CREATE TABLE clothing_categories (
                     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -45,7 +40,6 @@ def create_database():
                 )
             ''')
 
-            # 创建销售数据表
             cursor.execute('''
                 CREATE TABLE sales_data (
                     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -58,7 +52,6 @@ def create_database():
                 )
             ''')
 
-            # 插入初始服装类别数据
             cursor.execute('''
                 INSERT INTO clothing_categories 
                 (category_name, base_price, production_quantity) VALUES 

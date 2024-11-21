@@ -77,17 +77,14 @@ function updateSalesAnalysis() {
         });
 }
 
-// 添加类别筛选功能
 document.getElementById('categoryFilter').addEventListener('change', (e) => {
     const category = e.target.value;
     updateSalesAnalysis(category);
 });
 
-// 页面加载时显示图表
 document.addEventListener('DOMContentLoaded', () => {
     updateSalesAnalysis();
 
-    // 国家收入分布饼图
     const countryCtx = document.getElementById('countryPieChart').getContext('2d');
     new Chart(countryCtx, {
         type: 'pie',
@@ -100,7 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 销售收入柱状图
     const revenueCtx = document.getElementById('revenueBarChart').getContext('2d');
     new Chart(revenueCtx, {
         type: 'bar',
@@ -114,7 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 年度收入分布饼图
     const yearCtx = document.getElementById('yearPieChart').getContext('2d');
     new Chart(yearCtx, {
         type: 'pie',
@@ -127,7 +122,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 产品收入分布饼图
     const productCtx = document.getElementById('productPieChart').getContext('2d');
     new Chart(productCtx, {
         type: 'pie',

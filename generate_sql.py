@@ -1,6 +1,5 @@
 import random
 
-# 假设 2022 年的 DateID 为 13 到 24
 dates = list(range(13, 25))  # DateID 13 to 24
 
 products = list(range(1, 11))  # ProductID 1 to 10

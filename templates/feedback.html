@@ -8,7 +8,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="bg-gradient-to-r from-purple-500 to-pink-500 min-h-screen">
-    <!-- Top Navigation Bar -->
     <nav class="bg-white/80 backdrop-blur-sm">
         <div class="max-w-7xl mx-auto px-4">
             <div class="flex justify-between items-center h-16">
@@ -23,9 +22,7 @@
         </div>
     </nav>
 
-    <!-- Wrapper to center content vertically and horizontally -->
     <div class="flex items-center justify-center min-h-[calc(100vh-4rem)]">
-        <!-- Feedback Chart Card -->
         <div class="bg-white/80 backdrop-blur-sm rounded-lg p-6 shadow-lg max-w-2xl">
             <h2 class="text-2xl font-bold text-purple-600 mb-6 text-center">Feedback Chart</h2>
             <div class="flex justify-center">
@@ -57,9 +54,9 @@
             datasets: [{
                 data: [{{ percentages['good'] }}, {{ percentages['medium'] }}, {{ percentages['bad'] }}],
                 backgroundColor: [
-                    'rgb(34, 197, 94)',  // green-500
-                    'rgb(234, 179, 8)',   // yellow-500
-                    'rgb(239, 68, 68)',   // red-500
+                    'rgb(34, 197, 94)',
+                    'rgb(234, 179, 8)',
+                    'rgb(239, 68, 68)',
                 ],
                 borderWidth: 0
             }]
