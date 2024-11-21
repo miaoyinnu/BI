@@ -54,7 +54,7 @@
                 <canvas id="countryIncomeChart"></canvas>
             </div>
             <div class="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-6">
-                <h2 class="text-xl font-bold mb-4">Sales Revenue VS PY Sales Revenue</h2>
+                <h2 class="text-xl font-bold mb-4">Sales Revenue</h2>
                 <canvas id="salesVsPyChart"></canvas>
             </div>
         </div>
@@ -107,14 +107,6 @@
                 data: {{ sales_vs_py | map(attribute='current_revenue') | map('default', 0) | list | tojson }},
                 borderColor: 'rgba(54, 162, 235, 1)',
                 backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                fill: true,
-                tension: 0.1
-            },
-            {
-                label: 'Previous Revenue',
-                data: {{ sales_vs_py | map(attribute='previous_revenue') | map('default', 0) | list | tojson }},
-                borderColor: 'rgba(255, 99, 132, 1)',
-                backgroundColor: 'rgba(255, 99, 132, 0.2)',
                 fill: true,
                 tension: 0.1
             }
