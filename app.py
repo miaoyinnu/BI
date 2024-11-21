@@ -66,9 +66,46 @@ def login():
 
     return render_template('login.html', error=error)
 
-@app.route('/register')
+
+@app.route('/register', methods=['GET', 'POST'])
 def register():
-    return render_template('register.html')
+    error = None
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        confirm_password = request.form.get('confirm_password')
+
+        if not username or not password or not confirm_password:
+            error = "Please fill out all fields."
+        elif password != confirm_password:
+            error = "Passwords do not match."
+        else:
+            conn = get_db_connection()
+            cursor = conn.cursor()
+
+            # Check if username already exists
+            query = "SELECT * FROM users WHERE username = %s"
+            cursor.execute(query, (username,))
+            user = cursor.fetchone()
+
+            if user:
+                error = "Username already exists."
+            else:
+                # Insert new user into database
+                insert_query = "INSERT INTO users (username, password) VALUES (%s, %s)"
+                cursor.execute(insert_query, (username, password))
+                conn.commit()
+
+                cursor.close()
+                conn.close()
+
+                # Registration successful, redirect to login
+                return redirect(url_for('login'))
+
+            cursor.close()
+            conn.close()
+
+    return render_template('register.html', error=error)
 
 @app.route('/dashboard')
 def dashboard():
