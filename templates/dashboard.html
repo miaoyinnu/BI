@@ -99,27 +99,27 @@
             countryIncomeConfig
         );
 
-        const salesVsPyData = {
-            labels: {{ sales_vs_py | map(attribute='Month') | list | tojson }},
-            datasets: [
-                {
-                    label: 'Current Revenue',
-                    data: {{ sales_vs_py | map(attribute='current_revenue') | list | tojson }},
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    fill: true,
-                    tension: 0.1
-                },
-                {
-                    label: 'Previous Revenue',
-                    data: {{ sales_vs_py | map(attribute='previous_revenue') | list | tojson }},
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    fill: true,
-                    tension: 0.1
-                }
-            ]
-        };
+    const salesVsPyData = {
+        labels: {{ sales_vs_py | map(attribute='Month') | list | tojson }},
+        datasets: [
+            {
+                label: 'Current Revenue',
+                data: {{ sales_vs_py | map(attribute='current_revenue') | map('default', 0) | list | tojson }},
+                borderColor: 'rgba(54, 162, 235, 1)',
+                backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                fill: true,
+                tension: 0.1
+            },
+            {
+                label: 'Previous Revenue',
+                data: {{ sales_vs_py | map(attribute='previous_revenue') | map('default', 0) | list | tojson }},
+                borderColor: 'rgba(255, 99, 132, 1)',
+                backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                fill: true,
+                tension: 0.1
+            }
+        ]
+    };
 
         const salesVsPyConfig = {
             type: 'line',

@@ -104,13 +104,13 @@ def dashboard():
 
         # 查询销售收入与去年销售收入对比数据
         sales_vs_py_query = """
-        SELECT
+         SELECT
             d.Month,
             SUM(s.SellingRevenue) AS current_revenue,
             SUM(h.PY_SellingRevenue) AS previous_revenue
         FROM Sales s
         JOIN DateDim d ON s.DateID = d.DateID
-        JOIN HistoricalSales h ON s.ProductID = h.ProductID AND s.RegionID = h.RegionID AND s.DateID = h.DateID
+        LEFT JOIN HistoricalSales h ON s.ProductID = h.ProductID AND s.RegionID = h.RegionID AND s.DateID = h.DateID
         GROUP BY d.Month, d.DateID
         ORDER BY d.DateID
         """
