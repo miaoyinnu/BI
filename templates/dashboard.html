@@ -36,7 +36,9 @@
             </div>
             <div class="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-6">
                 <h3 class="text-gray-500 text-sm">Gross Profit Rate</h3>
-                <p class="text-2xl font-bold">{{ stats.avg_profit_rate or 0.00 }}%</p>
+                <p class="text-2xl font-bold">
+                    {{ "%.2f"|format(stats.avg_profit_rate|float) }}%
+                </p>
             </div>
             <div class="bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-6">
                 <h3 class="text-gray-500 text-sm">Gross Margin</h3>

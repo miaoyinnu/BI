@@ -142,10 +142,14 @@ def dashboard():
         cursor.execute(product_income_query)
         product_income = cursor.fetchall()
 
+        # 格式化毛利率为两位小数
+        gross_profit_rate = "{:.2f}".format(float(stats['avg_profit_rate']))
+
         # 将数据传递给模板
         return render_template('dashboard.html', username=username, stats=stats,
                                country_income=country_income, sales_vs_py=sales_vs_py,
-                               year_income=year_income, product_income=product_income)
+                               year_income=year_income, product_income=product_income,
+                               gross_profit_rate=gross_profit_rate)
 
     except Exception as e:
         print(f"Error: {e}")
