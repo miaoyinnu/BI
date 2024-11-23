@@ -194,7 +194,57 @@ def create_tables():
             cursor.close()
             conn.close()
             print("Database connection closed.")
+
+def clean_data():
+    try:
+        conn = mysql.connector.connect(
+            host='127.0.0.1',
+            user='root',
+            password='Muji2287300!',
+            database='fashion_bi'
+        )
+
+        if conn.is_connected():
+            cursor = conn.cursor()
+            
+            # 1. 清理异常值
+            cursor.execute("""
+                UPDATE Sales 
+                SET SellingRevenue = SellingRevenue * 0.8
+                WHERE SellingRevenue > (
+                    SELECT AVG(SellingRevenue) + 2 * STD(SellingRevenue)
+                    FROM (SELECT * FROM Sales) as s
+                )
+            """)
+            
+            # 2. 更新毛利率
+            cursor.execute("""
+                UPDATE Sales 
+                SET GrossProfitRate = (GrossMargin / SellingRevenue) * 100
+                WHERE SellingRevenue > 0
+            """)
+            
+            # 3. 调整销售数量
+            cursor.execute("""
+                UPDATE Sales 
+                SET SellingNumber = FLOOR(SellingNumber * 0.9)
+                WHERE SellingNumber > 1000
+            """)
+
+            conn.commit()
+            print("Data cleaned successfully!")
+
+    except Error as e:
+        print(f"Error: {e}")
+    finally:
+        if conn.is_connected():
+            cursor.close()
+            conn.close()
+            print("Database connection closed.")
+
 if __name__ == "__main__":
 
     create_database()
     create_tables()
+    # 导入原始数据后
+    clean_data()  # 执行数据清洗
